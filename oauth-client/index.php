@@ -31,7 +31,7 @@ function getUser($params)
 function handleLogin()
 {
     echo '<h1>Login with Auth-Code</h1>';
-    echo "<a href='https://localhost/auth?"
+    echo "<a href='http://localhost:8081/auth?"
         . "response_type=code"
         . "&client_id=" . CLIENT_ID
         . "&scope=basic&state=dsdsfsfds'>Login with oauth-server</a>";
