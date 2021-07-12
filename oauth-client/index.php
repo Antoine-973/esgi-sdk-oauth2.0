@@ -78,6 +78,47 @@ function handleFBSuccess()
     var_dump($user);
 }
 
+function handleGitHubSuccess()
+{
+    ["code" => $code] = $_GET;
+    // ECHANGE CODE => TOKEN
+    $contextEchangeCode = stream_context_create([
+        'http'=> [
+            'method' => "GET",
+            'header' => "Accept: application/json"
+        ]
+    ]);
+    $result = file_get_contents("https://github.com/login/oauth/access_token?"
+        . "client_id=" . CLIENT_GITHUBID
+        . "&client_secret=" . CLIENT_GITHUBSECRET
+        . "&code={$code}"
+        . "&redirect_uri=https://localhost/githubauth-success", false, $contextEchangeCode);
+    $token = json_decode($result, true)["access_token"];
+
+    $curl = curl_init();
+
+    curl_setopt_array($curl, array(
+        CURLOPT_URL => 'https://api.github.com/user',
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_ENCODING => '',
+        CURLOPT_MAXREDIRS => 10,
+        CURLOPT_TIMEOUT => 0,
+        CURLOPT_FOLLOWLOCATION => true,
+        CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+        CURLOPT_CUSTOMREQUEST => 'GET',
+        CURLOPT_HTTPHEADER => array(
+            'Authorization: token '. $token,
+            'User-Agent: PHP'
+        ),
+    ));
+
+    $result = curl_exec($curl);
+
+    curl_close($curl);
+    $user = json_decode($result, true);
+    var_dump($user);
+}
+
 function handleError()
 {
     echo "refusé";
