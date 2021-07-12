@@ -100,6 +100,9 @@ switch ($route) {
     case '/fbauth-success':
         handleFBSuccess();
         break;
+    case '/githubauth-success':
+        handleGitHubSuccess();
+        break;
     case '/auth-error':
         handleError();
         break;
