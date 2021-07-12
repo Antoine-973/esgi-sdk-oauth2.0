@@ -145,6 +145,9 @@ switch ($route) {
     case '/githubauth-success':
         handleGitHubSuccess();
         break;
+    case '/googleauth-success':
+        handleGoogleSuccess();
+        break;
     case '/auth-error':
         handleError();
         break;
