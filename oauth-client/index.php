@@ -39,6 +39,12 @@ function handleLogin()
     echo "<a href='https://github.com/login/oauth/authorize?"
         . "client_id=" . CLIENT_GITHUBID
         . "&scope=user&state=dsdsfsfds&redirect_uri=https://localhost/githubauth-success'>Login with GitHub</a>";
+    echo "<a href='https://accounts.google.com/o/oauth2/v2/auth?"
+        . "scope=email"
+        . "&access_type=online"
+        . "&redirect_uri=" . urlencode('https://localhost/googleauth-success')
+        . "&client_id=" . CLIENT_GOOGLEID
+        . "&response_type=code'>Login with Google</a>";
 }
 
 function handleSuccess()
