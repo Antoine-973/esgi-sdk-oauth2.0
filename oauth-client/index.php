@@ -41,6 +41,9 @@ function handleLogin()
         . "response_type=code"
         . "&client_id=" . CLIENT_FBID
         . "&scope=email&state=dsdsfsfds&redirect_uri=https://localhost/fbauth-success'>Login with Facebook</a>";
+    echo "<a href='https://github.com/login/oauth/authorize?"
+        . "client_id=" . CLIENT_GITHUBID
+        . "&scope=user&state=dsdsfsfds&redirect_uri=https://localhost/githubauth-success'>Login with GitHub</a>";
 }
 
 function handleSuccess()
