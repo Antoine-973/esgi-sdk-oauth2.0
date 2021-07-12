@@ -8,6 +8,8 @@ const CLIENT_ID = "client_6070546c6aba63.16480463";
 const CLIENT_FBID = "496139658139165";
 const CLIENT_SECRET = "38201ad253c323a79d9108f4588bbc62d2e1a5c6";
 const CLIENT_FBSECRET = "ac4ced60da429746e099de6415150b2f";
+const CLIENT_GITHUBID = "28bbae9e5a9aef3321cb";
+const CLIENT_GITHUBSECRET = "078591943158e0d445a1e4a6d0a08c70bf7dc6b6";
 
 function getUser($params)
 {
@@ -39,6 +41,9 @@ function handleLogin()
         . "response_type=code"
         . "&client_id=" . CLIENT_FBID
         . "&scope=email&state=dsdsfsfds&redirect_uri=https://localhost/fbauth-success'>Login with Facebook</a>";
+    echo "<a href='https://github.com/login/oauth/authorize?"
+        . "client_id=" . CLIENT_GITHUBID
+        . "&scope=user&state=dsdsfsfds&redirect_uri=https://localhost/githubauth-success'>Login with GitHub</a>";
 }
 
 function handleSuccess()
@@ -73,6 +78,47 @@ function handleFBSuccess()
     var_dump($user);
 }
 
+function handleGitHubSuccess()
+{
+    ["code" => $code] = $_GET;
+    // ECHANGE CODE => TOKEN
+    $contextEchangeCode = stream_context_create([
+        'http'=> [
+            'method' => "GET",
+            'header' => "Accept: application/json"
+        ]
+    ]);
+    $result = file_get_contents("https://github.com/login/oauth/access_token?"
+        . "client_id=" . CLIENT_GITHUBID
+        . "&client_secret=" . CLIENT_GITHUBSECRET
+        . "&code={$code}"
+        . "&redirect_uri=https://localhost/githubauth-success", false, $contextEchangeCode);
+    $token = json_decode($result, true)["access_token"];
+
+    $curl = curl_init();
+
+    curl_setopt_array($curl, array(
+        CURLOPT_URL => 'https://api.github.com/user',
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_ENCODING => '',
+        CURLOPT_MAXREDIRS => 10,
+        CURLOPT_TIMEOUT => 0,
+        CURLOPT_FOLLOWLOCATION => true,
+        CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+        CURLOPT_CUSTOMREQUEST => 'GET',
+        CURLOPT_HTTPHEADER => array(
+            'Authorization: token '. $token,
+            'User-Agent: PHP'
+        ),
+    ));
+
+    $result = curl_exec($curl);
+
+    curl_close($curl);
+    $user = json_decode($result, true);
+    var_dump($user);
+}
+
 function handleError()
 {
     echo "refusé";
@@ -94,6 +140,9 @@ switch ($route) {
         break;
     case '/fbauth-success':
         handleFBSuccess();
+        break;
+    case '/githubauth-success':
+        handleGitHubSuccess();
         break;
     case '/auth-error':
         handleError();
