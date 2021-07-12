@@ -120,6 +120,63 @@ function handleGitHubSuccess()
     var_dump($user);
 }
 
+function handleGoogleSuccess()
+{
+    ["code" => $code] = $_GET;
+
+    $curl = curl_init();
+
+    curl_setopt_array($curl, array(
+        CURLOPT_URL => 'https://oauth2.googleapis.com/token?'
+            . "client_id=" . CLIENT_GOOGLEID
+            . "&client_secret=" . CLIENT_GOOGLESECRET
+            . "&code=" . $code
+            . "&redirect_uri=https://localhost/googleauth-success"
+            . "&grant_type=authorization_code",
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_ENCODING => '',
+        CURLOPT_MAXREDIRS => 10,
+        CURLOPT_TIMEOUT => 0,
+        CURLOPT_FOLLOWLOCATION => true,
+        CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+        CURLOPT_CUSTOMREQUEST => 'POST',
+        CURLOPT_HTTPHEADER => array(
+            'Host: oauth2.googleapis.com',
+            'Content-Type: application/x-www-form-urlencoded',
+            'Content-Length: 0'
+        ),
+    ));
+
+    $result = curl_exec($curl);
+
+    curl_close($curl);
+
+    $token = json_decode($result, true)["access_token"];
+
+    $curl = curl_init();
+
+    curl_setopt_array($curl, array(
+        CURLOPT_URL => 'https://openidconnect.googleapis.com/v1/userinfo',
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_ENCODING => '',
+        CURLOPT_MAXREDIRS => 10,
+        CURLOPT_TIMEOUT => 0,
+        CURLOPT_FOLLOWLOCATION => true,
+        CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+        CURLOPT_CUSTOMREQUEST => 'GET',
+        CURLOPT_HTTPHEADER => array(
+            'Authorization: Bearer '. $token
+        )
+    ));
+
+    $result = curl_exec($curl);
+
+    curl_close($curl);
+
+    $user = json_decode($result, true);
+    var_dump($result);
+}
+
 function handleError()
 {
     echo "refusé";
