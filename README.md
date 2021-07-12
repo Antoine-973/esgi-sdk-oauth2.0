@@ -6,7 +6,7 @@ Providers :
 * Facebook
 * Oauth Server ESGI
 * GitHub
-* Twitter
+* Google
 *********************
 
 How to start the project :
