@@ -4,12 +4,7 @@
  * "client_id":"client_6070546c6aba63.16480463"
  * "client_secret":"38201ad253c323a79d9108f4588bbc62d2e1a5c6"
  */
-const CLIENT_ID = "client_6070546c6aba63.16480463";
-const CLIENT_FBID = "496139658139165";
-const CLIENT_SECRET = "38201ad253c323a79d9108f4588bbc62d2e1a5c6";
-const CLIENT_FBSECRET = "ac4ced60da429746e099de6415150b2f";
-const CLIENT_GITHUBID = "28bbae9e5a9aef3321cb";
-const CLIENT_GITHUBSECRET = "078591943158e0d445a1e4a6d0a08c70bf7dc6b6";
+require('config.php');
 
 function getUser($params)
 {
@@ -44,6 +39,12 @@ function handleLogin()
     echo "<a href='https://github.com/login/oauth/authorize?"
         . "client_id=" . CLIENT_GITHUBID
         . "&scope=user&state=dsdsfsfds&redirect_uri=https://localhost/githubauth-success'>Login with GitHub</a>";
+    echo "<a href='https://accounts.google.com/o/oauth2/v2/auth?"
+        . "scope=email"
+        . "&access_type=online"
+        . "&redirect_uri=" . urlencode('https://localhost/googleauth-success')
+        . "&client_id=" . CLIENT_GOOGLEID
+        . "&response_type=code'>Login with Google</a>";
 }
 
 function handleSuccess()
@@ -119,6 +120,63 @@ function handleGitHubSuccess()
     var_dump($user);
 }
 
+function handleGoogleSuccess()
+{
+    ["code" => $code] = $_GET;
+
+    $curl = curl_init();
+
+    curl_setopt_array($curl, array(
+        CURLOPT_URL => 'https://oauth2.googleapis.com/token?'
+            . "client_id=" . CLIENT_GOOGLEID
+            . "&client_secret=" . CLIENT_GOOGLESECRET
+            . "&code=" . $code
+            . "&redirect_uri=https://localhost/googleauth-success"
+            . "&grant_type=authorization_code",
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_ENCODING => '',
+        CURLOPT_MAXREDIRS => 10,
+        CURLOPT_TIMEOUT => 0,
+        CURLOPT_FOLLOWLOCATION => true,
+        CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+        CURLOPT_CUSTOMREQUEST => 'POST',
+        CURLOPT_HTTPHEADER => array(
+            'Host: oauth2.googleapis.com',
+            'Content-Type: application/x-www-form-urlencoded',
+            'Content-Length: 0'
+        ),
+    ));
+
+    $result = curl_exec($curl);
+
+    curl_close($curl);
+
+    $token = json_decode($result, true)["access_token"];
+
+    $curl = curl_init();
+
+    curl_setopt_array($curl, array(
+        CURLOPT_URL => 'https://openidconnect.googleapis.com/v1/userinfo',
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_ENCODING => '',
+        CURLOPT_MAXREDIRS => 10,
+        CURLOPT_TIMEOUT => 0,
+        CURLOPT_FOLLOWLOCATION => true,
+        CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+        CURLOPT_CUSTOMREQUEST => 'GET',
+        CURLOPT_HTTPHEADER => array(
+            'Authorization: Bearer '. $token
+        )
+    ));
+
+    $result = curl_exec($curl);
+
+    curl_close($curl);
+
+    $user = json_decode($result, true);
+    var_dump($result);
+}
+
 function handleError()
 {
     echo "refusé";
@@ -143,6 +201,9 @@ switch ($route) {
         break;
     case '/githubauth-success':
         handleGitHubSuccess();
+        break;
+    case '/googleauth-success':
+        handleGoogleSuccess();
         break;
     case '/auth-error':
         handleError();
