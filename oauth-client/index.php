@@ -1,10 +1,19 @@
 <?php
+require dirname(__DIR__) . DIRECTORY_SEPARATOR . 'autoloader.php';
+
+$configs = require('config.php');
+
+$collection = new App\ProviderCollection($configs);
+
+$providers = $collection->getProvider('facebook');
+
+var_dump($providers->getAuthLink());die;
 
 /**
  * "client_id":"client_6070546c6aba63.16480463"
  * "client_secret":"38201ad253c323a79d9108f4588bbc62d2e1a5c6"
  */
-require('config.php');
+
 
 function getUser($params)
 {
@@ -223,6 +232,47 @@ switch ($route) {
                 'password' => $password
             ]);
         }
+        break;
+    default:
+        http_response_code(404);
+}
+/**
+ *@Todo Christian
+ */
+
+function getAllProviders()
+{
+    $redirect_uri = 'https://localhost/auth';
+    return [
+        'facebook' => [
+            'link_label' => 'Login with Facebook',
+            'instance' => new Facebook(FB_CLIENT_ID, FB_SECRET, "${redirect_uri}?provider=facebook")
+        ],
+        'app' => [
+            'link_label' => 'Login with App',
+            'instance' => new App(APP_CLIENT_ID, APP_SECRET, "${redirect_uri}?provider=app", ['scope' => 'userinfo', 'state' => 'state_example'])
+        ],
+        'github' => [
+            'link_label' => 'Login with Github',
+            'instance' => new Github(GITHUB_CLIENT_ID, GITHUB_SECRET, "${redirect_uri}?provider=github", [], GITHUB_APP)
+        ],
+        'google' => [
+            'link_label' => 'Login with Google',
+            'instance' => new Google(GOOGLE_CLIENT_ID, GOOGLE_SECRET, "${redirect_uri}?provider=google", ['scope' => 'https://www.googleapis.com/auth/userinfo.profile'])
+        ],
+    ];
+}
+
+$response = new App\Response();
+
+$route = strtok($_SERVER["REQUEST_URI"], '?');
+switch ($route) {
+    case '/':
+        displayHome($providers);
+        break;
+    case '/auth':
+        if (!$provider = $providers[$_GET['provider']]['instance']) die("Une erreur est survenue : le provider {$_GET['provider']} n'est pas reconnu");
+        handleResponse($provider, $_GET);
         break;
     default:
         http_response_code(404);

@@ -10,7 +10,7 @@ ENV PORT=80
 
 COPY docker/docker-entrypoint.sh /usr/local/bin/docker-entrypoint
 RUN chmod +x /usr/local/bin/docker-entrypoint
-ENTRYPOINT ["docker-entrypoint"]
+ENTRYPOINT ["/bin/sh", "./docker/docker-entrypoint.sh"]
 
 COPY --from=caddy /usr/bin/caddy /usr/local/bin/caddy
 
