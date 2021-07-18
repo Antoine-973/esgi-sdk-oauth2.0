@@ -4,9 +4,9 @@ use App\Provider;
 use App\Request;
 use App\ProviderInterface;
 
-class AppProvider extends Provider implements ProviderInterface
+class GithubProvider extends Provider implements ProviderInterface
 {
-
+    private $code;
 
     public function __construct($client_id, $client_secret, $auth_url,  $access_token_url, $user_info_url, $redirect_uri, $options = [])
     {
@@ -23,20 +23,19 @@ class AppProvider extends Provider implements ProviderInterface
         $this->options = $options;
     }
 
-
     public function getUser($code)
     {
         $request = new Request();
         $access_token = $this->getAccessToken($code, true);
-        
-        $headers = $request->setHeaders('GET', ["Authorization: Bearer ${access_token}", "User-Agent: app"]);
-
-        return $access_token ? $request->get($this->api_url, $headers) : false;
+        $headers = $request->setHeaders('GET', ["Authorization: Bearer ${access_token}", "User-Agent: github"]);
+        return $access_token ? $request->get($this->user_info_url, $headers) : false;
     }
 
     public function getAuthLink()
     {
         $link = $this->getAuthorizationUrl();
-        return "<div class='facebook-link'><a href='$link'>Login with App.</a></di>";
+        return "<div class='github-link'><a href='$link'>Login with Github.</a></di>";
     }
+
+
 }

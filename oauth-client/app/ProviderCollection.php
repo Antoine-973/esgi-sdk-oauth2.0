@@ -7,6 +7,7 @@ class ProviderCollection{
 
     public function __construct(array $providersCredentials)
     {
+
         $this->credentials = $providersCredentials;
 
     }
@@ -33,10 +34,10 @@ class ProviderCollection{
 
     public function getProvider(string $providerName)
     {
+       
         if($class = $this->getProviderClass($providerName)){
             $params = $this->credentials[$providerName] ?? null;
             $values = array_values($params) ?? null;
-
             return ($values) ? new $class(...$values) : null;
         }
 

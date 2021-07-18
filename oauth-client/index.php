@@ -1,13 +1,30 @@
 <?php
-require dirname(__DIR__) . DIRECTORY_SEPARATOR . 'autoloader.php';
+require __DIR__ . DIRECTORY_SEPARATOR . 'autoloader.php';
 
 $configs = require('config.php');
 
 $collection = new App\ProviderCollection($configs);
 
-$providers = $collection->getProvider('facebook');
+$github = $collection->getProvider('github');
+$google = $collection->getProvider('google');
+$facebook = $collection->getProvider('facebook');
+$app = $collection->getProvider('app');
 
-var_dump($providers->getAuthLink());die;
+//echo $google->getAuthLink();
+echo $facebook->getAuthLink();
+//echo $github->getAuthLink();
+//echo $app->getAuthLink();
+
+["code" => $code] = $_GET;
+/*
+var_dump($google->getUser($code));
+*/
+echo "<br /><br /><br />";
+var_dump($facebook->getUser($code));die;
+/*
+echo "<br /><br /><br />";
+var_dump($github->getUser($code));die;
+*/
 
 /**
  * "client_id":"client_6070546c6aba63.16480463"

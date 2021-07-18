@@ -4,13 +4,13 @@ use App\Request;
 
 abstract class Provider
 {
-    protected string $client_id;
-    protected string $client_secret;
-    protected string $auth_url;
-    protected string $user_info_url;
-    protected string $access_token_url;
-    protected string $redirect_uri;
-    protected array $options;
+    protected  $client_id;
+    protected  $client_secret;
+    protected  $auth_url;
+    protected  $user_info_url;
+    protected  $access_token_url;
+    protected  $redirect_uri;
+    protected  $options;
     protected $request;
 
     protected function __construct($client_id, $client_secret, $auth_url,  $access_token_url, $user_info_url, $redirect_uri, $options = [])
@@ -46,9 +46,10 @@ abstract class Provider
 
     public function getAuthorizationUrl()
     {
+ 
         return $this->request->getUrl($this->auth_url, array_merge([
             'response_type' => 'code',
-            'redirect_uri' => '$this->redirect_uri',
+            'redirect_uri' => $this->redirect_uri,
             'client_id' => $this->client_id,
         ], $this->options));
     }

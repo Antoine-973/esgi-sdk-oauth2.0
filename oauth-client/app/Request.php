@@ -3,13 +3,13 @@ namespace App;
 
 class Request{
 
-    function get(string $url, $ctx = null)
+    function get($url, $ctx = null)
     {
-        $data = file_get_contents($url, false, $ctx);
+        $data = file_get_contents($url, true, $ctx);
         return ($data) ? json_decode($data, true) : [];
     }
 
-    public function setHeaders(string $method, $headers)
+    public function setHeaders( $method, $headers)
     {
         return stream_context_create([
             'http' => [
@@ -19,8 +19,8 @@ class Request{
         ]);
     }
 
-    public function getUrl(string $url, array $params = [])
+    public function getUrl($url,  $params = [])
     {
-        return $url . (!empty($params) ? '?' . http_build_query($params) : '\n');
+        return $url . (!empty($params) ? '?' . http_build_query($params) : '');
     }
 }

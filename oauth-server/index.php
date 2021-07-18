@@ -1,30 +1,75 @@
 <?php
-include_once '../autoloader.php';
-$fileHandler = new FileHandler();
-$dataHandler = new DataHandler();
-$response = new Response();
 
-$router = new Router();
+function read_file($filename)
+{
+    if (!file_exists($filename)) throw new RuntimeException("{$filename} not exists");
 
+    $data = file($filename);
+    return array_map(fn($item) => unserialize($item), $data);
+}
+
+function write_file($data, $filename)
+{
+    if (!file_exists($filename)) throw new RuntimeException("{$filename} not exists");
+
+    $data = array_map(fn($item) => serialize($item), $data);
+    return file_put_contents($filename, implode(PHP_EOL, $data));
+}
+
+function findData($criteria, $filename, $findAll = false)
+{
+    $apps = read_file($filename);
+    $results = array_values(
+        array_filter(
+            $apps,
+            fn($app) => count(array_intersect_assoc($app, $criteria)) === count($criteria)
+        )
+    );
+
+    if ($findAll) return $results;
+
+    return count($results) === 1 ? $results[0] : null;
+}
+
+function findApp($criteria)
+{
+    return findData($criteria, './data/app.data');
+}
+
+function findAllCode($criteria)
+{
+    return findData($criteria, './data/code.data', true);
+}
+
+function findCode($criteria)
+{
+    return findData($criteria, './data/code.data');
+}
+
+function findToken($criteria)
+{
+    return findData($criteria, './data/token.data');
+}
 
 function register()
 {
     ["name" => $name] = $_POST;
 
-    if ($dataHandler->findApp(["name" => $name])) throw new InvalidArgumentException("{$name} already registered");
+    if (findApp(["name" => $name])) throw new InvalidArgumentException("{$name} already registered");
 
     $clientID = uniqid('client_', true);
     $clientSecret = sha1($clientID);
 
-    $apps = $fileHandler->read_file('./data/app.data');
+    $apps = read_file('./data/app.data');
     $apps[] = array_merge(
         $_POST,
         ["client_id" => $clientID, "client_secret" => $clientSecret]
     );
 
-    $fileHandler->write_file($apps, './data/app.data');
+    write_file($apps, './data/app.data');
 
-    $response->send(["client_id" => $clientID, "client_secret" => $clientSecret], 201);
+    http_response_code(201);
+    echo json_encode(["client_id" => $clientID, "client_secret" => $clientSecret]);
 }
 
 function auth()
