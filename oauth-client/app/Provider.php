@@ -11,9 +11,10 @@ abstract class Provider
     protected  $access_token_url;
     protected  $redirect_uri;
     protected  $options;
+    protected  $headers;
     protected $request;
 
-    protected function __construct($client_id, $client_secret, $auth_url,  $access_token_url, $user_info_url, $redirect_uri, $options = [])
+    protected function __construct($client_id, $client_secret, $auth_url,  $access_token_url, $user_info_url, $redirect_uri, $options = [], $headers = [])
     {
         $this->client_id = $client_id;
         $this->client_secret = $client_secret;
@@ -29,9 +30,9 @@ abstract class Provider
         $this->request = new Request();
     }
 
-    protected function getAccessToken(string $code, bool $is_post = false)
+    protected function getAccessToken(string $code, bool $is_post = false, $options = [])
     {
-        $context = $is_post ? $this->request->setHeaders('POST', ['Content-Type: application/x-www-form-urlencoded', 'Content-Length: 0', 'Accept: application/json']) : null;
+        $context = $is_post ? $this->request->setHeaders('POST', ($options) ? $options : ['Content-Type: application/x-www-form-urlencoded', 'Content-Length: 0', 'Accept: application/json']) : null;
         $url = $this->request->getUrl($this->access_token_url, [
             'code' => $code,
             'client_id' => $this->client_id,

@@ -8,9 +8,9 @@ class AppProvider extends Provider implements ProviderInterface
 {
 
 
-    public function __construct($client_id, $client_secret, $auth_url,  $access_token_url, $user_info_url, $redirect_uri, $options = [])
+    public function __construct($client_id, $client_secret, $auth_url,  $access_token_url, $user_info_url, $redirect_uri, $options = [], $headers = [])
     {
-        parent::__construct($client_id, $client_secret, $auth_url,  $access_token_url, $user_info_url, $redirect_uri, $options = []);
+        parent::__construct($client_id, $client_secret, $auth_url,  $access_token_url, $user_info_url, $redirect_uri, $options = [], $headers = []);
 
         $this->client_id = $client_id;
         $this->client_secret = $client_secret;
@@ -21,6 +21,7 @@ class AppProvider extends Provider implements ProviderInterface
 
         $this->redirect_uri = $redirect_uri;
         $this->options = $options;
+        $this->headers = $headers;
     }
 
 
@@ -37,6 +38,20 @@ class AppProvider extends Provider implements ProviderInterface
     public function getAuthLink()
     {
         $link = $this->getAuthorizationUrl();
-        return "<div class='app-link'><a href='$link'>Login with App.</a></di>";
+        $css = "
+            display:inline-block;
+            border-radius: 4px;
+            padding:0.7em 1.7em;
+            margin-bottom : 10px;
+            text-decoration:none;
+            font-weight:400;
+            color:#FFFFFF;
+            background: #5b3C11;
+            text-align:center;
+            font-family:sans-serif;
+            font-weight:bold;
+            ";
+
+        return "<div class='app-link'><a style='$css' href='$link'>Login with App</a></di>";
     }
 }
