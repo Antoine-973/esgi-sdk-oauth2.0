@@ -1,0 +1,23 @@
+<?php
+return [
+    '{provider_name1}' => [
+        'client_id' => '',
+        'client_secret' => '',
+        'auth_url' => '',
+        'access_token_url' => '',
+        'user_info_url' => '',
+        'redirect_url' => ''
+    ],
+
+    '{provider_name1}' => [
+        'client_id' => '',
+        'client_secret' => '',
+        'auth_url' => '',
+        'access_token_url' => '',
+        'user_info_url' => '',
+        'redirect_url' => ''
+        //For passing options that are additional to default providers parameters
+        ['scope' => 'email', 'access_type' => 'online']
+    ],
+
+];
