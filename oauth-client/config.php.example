@@ -1,23 +1,20 @@
 <?php
 return [
-    '{provider_name1}' => [
-        'client_id' => '',
-        'client_secret' => '',
-        'auth_url' => '',
-        'access_token_url' => '',
-        'user_info_url' => '',
-        'redirect_url' => ''
-    ],
-
-    '{provider_name1}' => [
-        'client_id' => '',
-        'client_secret' => '',
-        'auth_url' => '',
-        'access_token_url' => '',
-        'user_info_url' => '',
-        'redirect_url' => ''
-        //For passing options that are additional to default providers parameters
-        ['scope' => 'email', 'access_type' => 'online']
-    ],
+    /*
+         * 1) Copy/Paste this file and name it config.php after that, use the below example for adding your providers, edit the different parameters depending of need of your provider, after that go to the /app/ExampleProvider.php
+         *
+        'example_provider' => [
+            'client_id' => '', The client ID of your provider you need to recover it in the parameters of your oauth app.
+            'client_secret' => '', The client secret ID of your provider you need to recover it in the parameters of your oauth app.
+            'auth_url' => '', The logging url of the provider
+            'access_token_url' => '', The url for getting the the authorization code needed for getting the data from the provider
+            'user_info_url' => '', The url of the provider for getting the data for oauth the user data
+            'redirect_url' => '', The redirect url of yout app, in this project the url is https://localhost/auth
+            Here you can add optional parameters if your provider need additional parameters for getting the authorization code like scope or access_type. Example with google -> ['scope' => 'email', 'access_type' => 'online']
+            ['' => '', '' => ''],
+            The line bellow is useful when your provider need header parameters in the getUser request to the provider like google with these parameters : 'headers' => ['Host: oauth2.googleapis.com', 'Content-Type: application/x-www-form-urlencoded', 'Content-Length: 0']
+            'headers' => ['', '', '']
+        ],
+        */
 
 ];
