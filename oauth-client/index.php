@@ -33,7 +33,7 @@ echo $app->getAuthLink();
 /*
  *  4) For adding the Login with link of your provider you need to add a same line as above and use the variable previously created and calling it's getAuthLink() method.
  *
- * echo $app->getAuthLink();
+ * echo $exampleProvider->getAuthLink();
  */
 
 ["code" => $code] = $_GET;
@@ -68,7 +68,7 @@ if ($code){
     *
     * Last Step add the following if condition for displaying the user result when receiving the provider response
     *
-    *    if ($user = $app->getTest($code)){
+    *    if ($user = $exampleProvider->getTest($code)){
     *        var_dump($user);
     *        die;
     *    }

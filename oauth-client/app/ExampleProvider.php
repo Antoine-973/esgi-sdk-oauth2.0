@@ -4,7 +4,7 @@ use App\Provider;
 use App\Request;
 use App\ProviderInterface;
 
-// 2) You need to copy & paste this file for adding your provider, and juste changing the filename & the classname
+// 2) You need to copy & paste this file for adding your provider, and just changing the filename & the classname
 class ExampleProvider extends Provider implements ProviderInterface
 {
     private $code;
