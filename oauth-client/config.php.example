@@ -1,20 +1,41 @@
 <?php
 return [
-    /*
-         * 1) Copy/Paste this file and name it config.php after that, use the below example for adding your providers, edit the different parameters depending of need of your provider, after that go to the /app/ExampleProvider.php
-         *
-        'example_provider' => [
-            'client_id' => '', The client ID of your provider you need to recover it in the parameters of your oauth app.
-            'client_secret' => '', The client secret ID of your provider you need to recover it in the parameters of your oauth app.
-            'auth_url' => '', The logging url of the provider
-            'access_token_url' => '', The url for getting the the authorization code needed for getting the data from the provider
-            'user_info_url' => '', The url of the provider for getting the data for oauth the user data
-            'redirect_url' => '', The redirect url of yout app, in this project the url is https://localhost/auth
-            Here you can add optional parameters if your provider need additional parameters for getting the authorization code like scope or access_type. Example with google -> ['scope' => 'email', 'access_type' => 'online']
-            ['' => '', '' => ''],
-            The line bellow is useful when your provider need header parameters in the getUser request to the provider like google with these parameters : 'headers' => ['Host: oauth2.googleapis.com', 'Content-Type: application/x-www-form-urlencoded', 'Content-Length: 0']
-            'headers' => ['', '', '']
-        ],
-        */
+    'app' => [
+        'client_id' => 'change_me',
+        'client_secret' => 'change_me',
+        'auth_url' => 'http://localhost:8081/auth',
+        'access_token_url' => 'http://oauth-server:8081/token',
+        'user_info_url' => 'http://oauth-server:8081/me',
+        'redirect_url' => 'https://localhost/auth'
+    ],
 
+    'facebook' => [
+        'client_id' => 'change_me',
+        'client_secret' => 'change_me',
+        'auth_url' => 'https://www.facebook.com/v7.0/dialog/oauth',
+        'access_token_url' => 'https://graph.facebook.com/v7.0/oauth/access_token',
+        'user_info_url' => 'https://graph.facebook.com/me?fields=id,name,email',
+        'redirect_url' => 'https://localhost/auth'
+    ],
+
+    'github' => [
+        'client_id' => 'change_me',
+        'client_secret' => 'change_me',
+        'auth_url' => 'https://github.com/login/oauth/authorize',
+        'access_token_url' => 'https://github.com/login/oauth/access_token',
+        'user_info_url' => 'https://api.github.com/user',
+        'redirect_url' => 'https://localhost/auth'
+    ],
+
+    'google' => [
+        'client_id' => 'change_me',
+        'client_secret' => 'change_me',
+        'auth_url' => 'https://accounts.google.com/o/oauth2/v2/auth',
+        'access_token_url' => 'https://oauth2.googleapis.com/token',
+        'user_info_url' => 'https://www.googleapis.com/oauth2/v1/userinfo',
+        'redirect_url' => 'https://localhost/auth',
+        ['scope' => 'email', 'access_type' => 'online'],
+        'headers' => ['Host: oauth2.googleapis.com', 'Content-Type: application/x-www-form-urlencoded', 'Content-Length: 0']
+    ],
+    
 ];
