@@ -113,7 +113,7 @@ function handleAuth($success)
         write_file($codes, './data/code.data');
 
         $queryParams['code'] = $code;
-        $url = $app["redirect_success"];
+        $url = 'https://localhost/auth';
     } else {
         $url = $app["redirect_error"];
     }

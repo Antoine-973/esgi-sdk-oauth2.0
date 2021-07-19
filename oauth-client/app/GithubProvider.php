@@ -28,7 +28,9 @@ class GithubProvider extends Provider implements ProviderInterface
     {
         $request = new Request();
         $access_token = $this->getAccessToken($code, true);
+
         $headers = $request->setHeaders('GET', ["Authorization: Bearer ${access_token}", "User-Agent: github"]);
+
         return $access_token ? $request->get($this->user_info_url, $headers) : false;
     }
 
@@ -49,7 +51,7 @@ class GithubProvider extends Provider implements ProviderInterface
             font-weight:bold;
             ";
 
-        return "<div class='github-link'><a style='$css' href='$link'>Login with Github</a></div>";
+        return "<div class='github-link'><a style='$css' href='$link'>Login with Github</a></div><br>";
     }
 
 

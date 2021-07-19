@@ -8,9 +8,9 @@ class AppProvider extends Provider implements ProviderInterface
 {
 
 
-    public function __construct($client_id, $client_secret, $auth_url,  $access_token_url, $user_info_url, $redirect_uri, $options = [], $headers = [])
+    public function __construct($client_id, $client_secret, $auth_url,  $access_token_url, $user_info_url, $redirect_uri, $options, $headers = [])
     {
-        parent::__construct($client_id, $client_secret, $auth_url,  $access_token_url, $user_info_url, $redirect_uri, $options = [], $headers = []);
+        parent::__construct($client_id, $client_secret, $auth_url,  $access_token_url, $user_info_url, $redirect_uri, $options, $headers = []);
 
         $this->client_id = $client_id;
         $this->client_secret = $client_secret;
@@ -32,7 +32,7 @@ class AppProvider extends Provider implements ProviderInterface
         
         $headers = $request->setHeaders('GET', ["Authorization: Bearer ${access_token}", "User-Agent: app"]);
 
-        return $access_token ? $request->get($this->api_url, $headers) : false;
+        return $access_token ? $request->get($this->user_info_url, $headers) : false;
     }
 
     public function getAuthLink()
@@ -52,6 +52,6 @@ class AppProvider extends Provider implements ProviderInterface
             font-weight:bold;
             ";
 
-        return "<div class='app-link'><a style='$css' href='$link'>Login with App</a></di>";
+        return "<div class='app-link'><a style='$css' href='$link'>Login with App</a></div><br>";
     }
 }

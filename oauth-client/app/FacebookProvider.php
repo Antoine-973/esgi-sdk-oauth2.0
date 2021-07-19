@@ -49,6 +49,6 @@ class FacebookProvider extends Provider implements ProviderInterface
             font-family:sans-serif;
             font-weight:bold;
             ";
-        return "<div class='facebook-link'><a style='$css' href='$link'>Login with Facebook</a></div>";
+        return "<div class='facebook-link'><a style='$css' href='$link'>Login with Facebook</a></div><br>";
     }
 }

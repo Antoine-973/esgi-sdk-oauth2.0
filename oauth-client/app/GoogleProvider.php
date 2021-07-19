@@ -25,9 +25,10 @@ class GoogleProvider extends Provider implements ProviderInterface
 
     public function getUser($code)
     {
-
         $request = new Request();
+
         $access_token = ($code) ? $this->getAccessToken($code, true, $this->headers) : null;
+
         $headers =   $request->setHeaders('GET', "Authorization: Bearer ${access_token}");
 
         return $access_token ? $request->get($this->user_info_url, $headers) : false;
@@ -50,6 +51,6 @@ class GoogleProvider extends Provider implements ProviderInterface
             font-weight:bold;
             ";
 
-        return "<div class='google-link'><a style='$css' href='$link'>Login with Google</a></div>";
+        return "<div class='google-link'><a style='$css' href='$link'>Login with Google</a></div><br>";
     }
 }
